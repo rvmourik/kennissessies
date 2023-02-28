@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+
+    </script>
+</head>
+<body>
+
+<div class="grid grid-cols-12 gap-6">
+    <div class="col-span-6">
+        <div id="native_app"></div>
+
+        <script type="text/javascript">
+            window.addEventListener('DOMContentLoaded', () => {
+                document.querySelector('#native_app').innerHTML = 'Hello from Native JS!'
+            })
+        </script>
+
+    </div>
+    <div class="col-span-6">
+        <div id="vue_app">{{ message }}</div>
+
+        <script type="module">
+            import {createApp} from 'vue'
+
+            createApp({
+                data() {
+                    return {
+                        message: 'Hello Vue!'
+                    }
+                }
+            }).mount('#vue_app')
+        </script>
+    </div>
+</div>
+
+<div class="mt-10">
+    <a href="./index.html" class="text-blue-500">Back to index</a>
+</div>
+
+</body>
+</html>

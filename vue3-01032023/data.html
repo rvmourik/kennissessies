@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+    </script>
+</head>
+<body>
+
+<div id="vue_app">
+    <h1>Todo's</h1>
+
+    <button @click="fetchData" v-if="!isLoading">Refresh</button>
+
+    <div v-if="isLoading">Data wordt geladen...</div>
+    <ul v-else-if="!isLoading && data.length > 0" class="list-style-disc">
+        <li v-for="todo in data" :key="todo.id">
+            <label><input type="checkbox" :value="todo.id" :checked="todo.completed" /> {{ todo.title }}</label>
+        </li>
+    </ul>
+</div>
+
+
+<script type="module">
+    import {createApp, ref} from 'vue'
+
+    createApp({
+        setup() {
+            const isLoading = ref(false)
+            const data = ref([])
+
+            const fetchData = () => {
+                isLoading.value = true;
+
+                // timeout puur voor demo purposes
+                setTimeout(() => {
+                    fetch('https://jsonplaceholder.typicode.com/todos')
+                        .then(response => response.json())
+                        .then(json => data.value = json)
+
+                    isLoading.value = false;
+                }, 1000);
+            };
+
+            fetchData();
+
+            return {
+                isLoading,
+                data,
+                fetchData
+            }
+        }
+    }).mount('#vue_app')
+</script>
+
+<div class="mt-10">
+    <a href="./index.html" class="text-blue-500">Back to index</a>
+</div>
+
+</body>
+</html>

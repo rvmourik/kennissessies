@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+    </script>
+</head>
+<body>
+
+
+<div id="vue_app">
+    <h1 class="text-xl">Vue</h1>
+
+    Hoeveel bier drink je tegelijkertijd: <input type="number" v-model="step"
+                                                 class="border border-gray-500 px-2 py-1"/>
+
+    <p class="mt-4 border-t border-gray-200 pt-2">
+        {{ count }} bottles of beer on the wall
+    </p>
+    <p>
+        {{ count }} bottles of beer
+    </p>
+    <p>
+        take {{ step }} down pass it a-round
+    </p>
+    <p>
+        {{ answer }} bottles of beer on the wall
+    </p>
+
+    <button class="bg-gray-200 border-gray-300 border text-sm px-4 py-1.5 mt-3" @click="play">Drink</button>
+    <button @click="reset" class="bg-gray-200 border-gray-300 border text-red-600 text-sm px-4 py-1.5 mt-3">reset
+    </button>
+</div>
+
+
+<script type="module">
+    import {createApp, ref, computed} from 'vue'
+
+    createApp({
+        setup() {
+            const count = ref(100)
+            const step = ref(1)
+
+            const answer = computed(() => count.value - step.value)
+
+            const play = () => count.value -= step.value
+            const reset = () => {
+                count.value = 100;
+                step.value = 1;
+            }
+
+            return {
+                count,
+                step,
+                answer,
+                play,
+                reset
+            }
+        }
+    }).mount('#vue_app')
+</script>
+
+<div class="mt-10">
+    <a href="./index.html" class="text-blue-500">Back to index</a>
+</div>
+
+</body>
+</html>

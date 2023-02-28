@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+
+    </script>
+</head>
+<body>
+
+<div class="grid grid-cols-12 gap-6">
+    <div class="col-span-6">
+        <div id="vue_options">
+            <h1 class="text-xl">Vue Options API</h1>
+            <p>Count: <span>{{count}}</span></p>
+
+            <button id="addUndefined1" class="bg-gray-200 border-gray-300 border text-sm px-4 py-1.5 mt-3">Add (undefined)</button>
+            <button id="addJit1" class="bg-gray-200 border-gray-300 border text-sm px-4 py-1.5 mt-3">Add</button>
+        </div>
+
+        <script type="module">
+            import {createApp} from 'vue'
+
+            createApp({
+                data() {
+                    return {
+                        count: 1
+                    }
+                },
+                methods: {
+                    add() {
+                        this.count += 1;
+                    }
+                },
+                created() {
+                    try {
+                        document.querySelector('#addUndefined1').addEventListener('click', () => this.add)
+                    } catch (error) {
+                        console.error('component is nog niet door de mounted hook heen dus je kan nog niet op de DOM inhaken')
+                    }
+                },
+                mounted() {
+                    document.querySelector('#addJit1').addEventListener('click', this.add)
+                },
+                unmounted() {
+                    document.querySelector('#addJit1').removeEventListener('click', this.add)
+                },
+            }).mount('#vue_options')
+        </script>
+    </div>
+
+    <div class="col-span-6">
+        <div id="vue_composition">
+            <h1 class="text-xl">Vue Composition API</h1>
+            <p>Count: <span>{{count}}</span></p>
+
+            <button id="addUndefined" class="bg-gray-200 border-gray-300 border text-sm px-4 py-1.5 mt-3">Add (undefined)</button>
+            <button id="addJit" class="bg-gray-200 border-gray-300 border text-sm px-4 py-1.5 mt-3">Add</button>
+        </div>
+
+        <script type="module">
+            import {createApp, ref, onMounted, onUnmounted } from 'vue'
+
+            createApp({
+                setup() {
+                    const count = ref(1)
+                    const add = () => count.value++;
+
+                    try {
+                        document.querySelector('#addUndefined').addEventListener('click', () => add)
+                    } catch (error) {
+                        console.error('component is nog niet door de mounted hook heen dus je kan nog niet op de DOM inhaken')
+                    }
+
+                    // Add events
+                    onMounted(() => {
+                        document.querySelector('#addJit').addEventListener('click', add)
+                    })
+
+                    // Cleanup events
+                    onUnmounted(() => {
+                        document.querySelector('#addJit').removeEventListener('click', add)
+                    })
+
+                    return {
+                        count,
+                    }
+                }
+            }).mount('#vue_composition')
+        </script>
+    </div>
+</div>
+
+<div class="mt-10">
+    <a href="./index.html" class="text-blue-500">Back to index</a>
+</div>
+
+</body>
+</html>
